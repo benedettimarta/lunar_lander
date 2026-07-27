@@ -1,8 +1,5 @@
 """
 Create report figures from the baseline and sensitivity-analysis results.
-
-Run:
-    python 04_plot_results.py
 """
 
 import matplotlib.pyplot as plt
@@ -44,13 +41,14 @@ def plot_sensitivity_summary():
         plt.errorbar(
             group["value"].astype(str),
             group["mean_reward"],
-            yerr=group["std_reward"],
+            yerr=group["reward_std_across_seeds"].fillna(0.0),
             marker="o",
             capsize=4,
         )
         plt.xlabel(parameter)
         plt.ylabel("Mean evaluation reward")
-        plt.title(f"Sensitivity of performance to {parameter}")
+        plt.title(f"Sensitivity of reward to {parameter}")
+        plt.xticks(rotation=25)
         plt.tight_layout()
         output = FIGURES_DIR / f"sensitivity_{parameter}_reward.png"
         plt.savefig(output, dpi=200)
@@ -58,10 +56,11 @@ def plot_sensitivity_summary():
         print(f"Saved {output}")
 
         plt.figure()
-        plt.bar(group["value"].astype(str), 100 * group["success_rate"])
+        plt.bar(group["value"].astype(str), 100 * group["mean_success_rate"])
         plt.xlabel(parameter)
-        plt.ylabel("Success rate [%]")
+        plt.ylabel("Mean success rate [%]")
         plt.title(f"Landing success rate vs {parameter}")
+        plt.xticks(rotation=25)
         plt.tight_layout()
         output = FIGURES_DIR / f"sensitivity_{parameter}_success_rate.png"
         plt.savefig(output, dpi=200)
@@ -69,10 +68,42 @@ def plot_sensitivity_summary():
         print(f"Saved {output}")
 
 
+def plot_robustness_results():
+    robustness_file = RESULTS_DIR / "robustness_summary.csv"
+    if not robustness_file.exists():
+        print("No robustness_summary.csv found. Skipping robustness plots.")
+        return
+
+    df = pd.read_csv(robustness_file)
+
+    plt.figure()
+    plt.bar(df["case"], df["mean_reward"])
+    plt.xlabel("Evaluation environment")
+    plt.ylabel("Mean reward")
+    plt.title("Robustness of trained policy to wind disturbances")
+    plt.tight_layout()
+    output = FIGURES_DIR / "robustness_mean_reward.png"
+    plt.savefig(output, dpi=200)
+    plt.close()
+    print(f"Saved {output}")
+
+    plt.figure()
+    plt.bar(df["case"], 100 * df["success_rate"])
+    plt.xlabel("Evaluation environment")
+    plt.ylabel("Success rate [%]")
+    plt.title("Landing success rate under wind disturbances")
+    plt.tight_layout()
+    output = FIGURES_DIR / "robustness_success_rate.png"
+    plt.savefig(output, dpi=200)
+    plt.close()
+    print(f"Saved {output}")
+
+
 def main():
     plot_baseline_learning_curve()
     plot_sensitivity_summary()
-    print("\nAll figures generated.")
+    plot_robustness_results()
+    print("\nAll available figures generated.")
 
 
 if __name__ == "__main__":
