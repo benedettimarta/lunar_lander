@@ -1,11 +1,7 @@
 """
 Watch the trained baseline agent perform one landing.
-
-Run:
-    python 05_watch_trained_agent.py
-
-If rendering does not work on your machine, skip this script. It is only for visual inspection.
 """
+
 from stable_baselines3 import DQN
 
 from config import DEFAULT_SEED, MODELS_DIR

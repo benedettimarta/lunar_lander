@@ -1,9 +1,7 @@
 """
 Evaluate a saved model and print results.
-
-Run:
-    python 02_evaluate_model.py
 """
+
 from stable_baselines3 import DQN
 
 from config import DEFAULT_SEED, MODELS_DIR, RESULTS_DIR, N_EVAL_EPISODES
