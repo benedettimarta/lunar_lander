@@ -1,11 +1,15 @@
 """
-Shared configuration for the Lunar Lander RL assignment.
+Configuration for the advanced Lunar Lander RL project.
 
-This upgraded version increases the assignment complexity by:
-1. varying six DQN hyperparameters,
-2. repeating each case over multiple random seeds,
-3. evaluating robustness under wind disturbances.
+Project features:
+- algorithm comparison: DQN vs PPO
+- expanded hyperparameter sensitivity
+- reward-shaping sensitivity
+- robustness testing under sensor noise and thruster-command uncertainty
+- multiple evaluation metrics
+- optional short curriculum/fine-tuning experiment
 """
+
 from pathlib import Path
 
 ENV_ID = "LunarLander-v3"
@@ -16,33 +20,53 @@ RESULTS_DIR = ROOT_DIR / "results"
 FIGURES_DIR = ROOT_DIR / "figures"
 LOGS_DIR = ROOT_DIR / "logs"
 
-for folder in [MODELS_DIR, RESULTS_DIR, FIGURES_DIR, LOGS_DIR]:
-    folder.mkdir(exist_ok=True)
+for d in [MODELS_DIR, RESULTS_DIR, FIGURES_DIR, LOGS_DIR]:
+    d.mkdir(exist_ok=True)
 
-# Default training settings
-DEFAULT_TOTAL_TIMESTEPS = 300_000
-SENSITIVITY_TIMESTEPS = 150_000
+# General settings
 DEFAULT_SEED = 42
-SEEDS = [42, 123]  # Increase to [42, 123, 999] if your computer can handle it.
-
-# Default DQN hyperparameters
-DEFAULT_LEARNING_RATE = 5e-4
-DEFAULT_GAMMA = 0.99
-DEFAULT_EXPLORATION_FRACTION = 0.20
-DEFAULT_EXPLORATION_FINAL_EPS = 0.05
-DEFAULT_BATCH_SIZE = 64
-DEFAULT_BUFFER_SIZE = 100_000
-DEFAULT_TARGET_UPDATE_INTERVAL = 1_000
-DEFAULT_TRAIN_FREQ = 4
-DEFAULT_NET_ARCH = [128, 128]
-
-# Evaluation settings
+SEEDS = [42, 123]  # Use [42, 123, 999] for a stronger final report if runtime allows.
 N_EVAL_EPISODES = 50
 SUCCESS_REWARD_THRESHOLD = 200.0
+CRASH_REWARD_THRESHOLD = -100.0
 
-# Hyperparameter sensitivity analysis.
-# This is one-at-a-time sensitivity: all parameters stay at the default except the one being varied.
-SENSITIVITY_EXPERIMENTS = [
+# Training durations. Increase these for final runs if you have time.
+BASELINE_TIMESTEPS = 300_000
+SENSITIVITY_TIMESTEPS = 50_000
+REWARD_SENSITIVITY_TIMESTEPS = 50_000
+CURRICULUM_STAGE_TIMESTEPS = 150_000
+
+# Baseline DQN hyperparameters
+DQN_BASE = {
+    "learning_rate": 5e-4,
+    "gamma": 0.99,
+    "exploration_fraction": 0.20,
+    "exploration_final_eps": 0.05,
+    "buffer_size": 100_000,
+    "learning_starts": 1_000,
+    "batch_size": 64,
+    "target_update_interval": 1_000,
+    "train_freq": 4,
+    "gradient_steps": 1,
+    "net_arch": [128, 128],
+}
+
+# Baseline PPO hyperparameters
+PPO_BASE = {
+    "learning_rate": 3e-4, # 1e-4
+    "gamma": 0.99,
+    "n_steps": 1024, # 2048
+    "batch_size": 64,
+    "n_epochs": 10,
+    "clip_range": 0.2,
+    "ent_coef": 0.0, # 0.001
+    "gae_lambda": 0.95,
+    "net_arch": [128, 128], # [256, 256]
+}
+
+# One-at-a-time hyperparameter sensitivity experiments.
+# Algorithms are kept separate because DQN and PPO do not have identical parameters.
+DQN_SENSITIVITY = [
     {"parameter": "learning_rate", "values": [1e-4, 5e-4, 1e-3]},
     {"parameter": "gamma", "values": [0.90, 0.95, 0.99]},
     {"parameter": "exploration_final_eps", "values": [0.01, 0.05, 0.10]},
@@ -52,10 +76,61 @@ SENSITIVITY_EXPERIMENTS = [
     {"parameter": "net_arch", "values": [[64, 64], [128, 128], [256, 256]]},
 ]
 
-# Robustness environments used after training.
-# These evaluate whether the trained controller generalizes to disturbances.
+PPO_SENSITIVITY = [
+    {"parameter": "learning_rate", "values": [1e-4, 3e-4, 1e-3]},
+    {"parameter": "gamma", "values": [0.90, 0.95, 0.99]},
+    {"parameter": "clip_range", "values": [0.1, 0.2, 0.3]},
+    {"parameter": "ent_coef", "values": [0.0, 0.001, 0.01]},
+    {"parameter": "n_steps", "values": [512, 1024, 2048]},
+    {"parameter": "batch_size", "values": [32, 64, 128]},
+    {"parameter": "net_arch", "values": [[64, 64], [128, 128], [256, 256]]},
+]
+
+# Reward-shaping sensitivity.
+# These add extra shaping terms to the original LunarLander reward.
+REWARD_CASES = [
+    {
+        "case": "original_reward",
+        "fuel_penalty": 0.0,
+        "angle_penalty": 0.0,
+        "velocity_penalty": 0.0,
+    },
+    {
+        "case": "fuel_saving",
+        "fuel_penalty": 0.03,
+        "angle_penalty": 0.0,
+        "velocity_penalty": 0.0,
+    },
+    {
+        "case": "attitude_stability",
+        "fuel_penalty": 0.0,
+        "angle_penalty": 0.10,
+        "velocity_penalty": 0.0,
+    },
+    {
+        "case": "soft_landing",
+        "fuel_penalty": 0.0,
+        "angle_penalty": 0.0,
+        "velocity_penalty": 0.10,
+    },
+    {
+        "case": "combined_shaping",
+        "fuel_penalty": 0.02,
+        "angle_penalty": 0.05,
+        "velocity_penalty": 0.05,
+    },
+]
+
+# Robustness evaluation cases. These are physically meaningful for lunar landing.
+# The controller is trained in the nominal environment and evaluated under:
+# - measurement uncertainty, representing imperfect navigation sensors;
+# - thruster command dropout, representing actuator/command uncertainty;
+# - a combined sensor and actuator uncertainty case.
 ROBUSTNESS_CASES = [
-    {"case": "no_wind", "enable_wind": False, "wind_power": 0.0, "turbulence_power": 0.0},
-    {"case": "light_wind", "enable_wind": True, "wind_power": 5.0, "turbulence_power": 0.5},
-    {"case": "strong_wind", "enable_wind": True, "wind_power": 15.0, "turbulence_power": 1.5},
+    {"case": "nominal", "obs_noise_std": 0.0, "action_dropout_prob": 0.0},
+    {"case": "low_sensor_noise", "obs_noise_std": 0.02, "action_dropout_prob": 0.0},
+    {"case": "high_sensor_noise", "obs_noise_std": 0.05, "action_dropout_prob": 0.0},
+    {"case": "low_thruster_dropout", "obs_noise_std": 0.0, "action_dropout_prob": 0.05},
+    {"case": "high_thruster_dropout", "obs_noise_std": 0.0, "action_dropout_prob": 0.15},
+    {"case": "combined_noise_dropout", "obs_noise_std": 0.02, "action_dropout_prob": 0.05},
 ]
