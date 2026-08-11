@@ -26,7 +26,7 @@ for d in [MODELS_DIR, RESULTS_DIR, FIGURES_DIR, LOGS_DIR]:
 # General settings
 DEFAULT_SEED = 42
 SEEDS = [42, 123]  # Use [42, 123, 999] for a stronger final report if runtime allows.
-N_EVAL_EPISODES = 50
+N_EVAL_EPISODES = 200
 SUCCESS_REWARD_THRESHOLD = 200.0
 CRASH_REWARD_THRESHOLD = -100.0
 
@@ -38,13 +38,13 @@ CURRICULUM_STAGE_TIMESTEPS = 150_000
 
 # Baseline DQN hyperparameters
 DQN_BASE = {
-    "learning_rate": 5e-4,
+    "learning_rate": 1e-4,
     "gamma": 0.99,
     "exploration_fraction": 0.20,
-    "exploration_final_eps": 0.05,
+    "exploration_final_eps": 0.01,
     "buffer_size": 100_000,
     "learning_starts": 1_000,
-    "batch_size": 64,
+    "batch_size": 128,
     "target_update_interval": 1_000,
     "train_freq": 4,
     "gradient_steps": 1,
@@ -54,12 +54,12 @@ DQN_BASE = {
 # Baseline PPO hyperparameters
 PPO_BASE = {
     "learning_rate": 3e-4, # 1e-4
-    "gamma": 0.99,
+    "gamma": 0.999,
     "n_steps": 1024, # 2048
     "batch_size": 64,
     "n_epochs": 10,
     "clip_range": 0.2,
-    "ent_coef": 0.0, # 0.001
+    "ent_coef": 0.01, # 0.001
     "gae_lambda": 0.95,
     "net_arch": [128, 128], # [256, 256]
 }
@@ -68,7 +68,7 @@ PPO_BASE = {
 # Algorithms are kept separate because DQN and PPO do not have identical parameters.
 DQN_SENSITIVITY = [
     {"parameter": "learning_rate", "values": [1e-4, 5e-4, 1e-3]},
-    {"parameter": "gamma", "values": [0.90, 0.95, 0.99]},
+    {"parameter": "gamma", "values": [0.95, 0.99, 0.995]},
     {"parameter": "exploration_final_eps", "values": [0.01, 0.05, 0.10]},
     {"parameter": "batch_size", "values": [32, 64, 128]},
     {"parameter": "buffer_size", "values": [50_000, 100_000, 200_000]},
@@ -78,7 +78,7 @@ DQN_SENSITIVITY = [
 
 PPO_SENSITIVITY = [
     {"parameter": "learning_rate", "values": [1e-4, 3e-4, 1e-3]},
-    {"parameter": "gamma", "values": [0.90, 0.95, 0.99]},
+    {"parameter": "gamma", "values": [0.95, 0.99, 0.995]},
     {"parameter": "clip_range", "values": [0.1, 0.2, 0.3]},
     {"parameter": "ent_coef", "values": [0.0, 0.001, 0.01]},
     {"parameter": "n_steps", "values": [512, 1024, 2048]},

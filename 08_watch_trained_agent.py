@@ -13,7 +13,7 @@ from core import load_model, make_env
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--algorithm", choices=["DQN", "PPO"], default="DQN")
+    parser.add_argument("--algorithm", choices=["DQN", "PPO"], default="PPO")
     parser.add_argument("--disturbance", choices=["none", "low_noise", "high_noise", "dropout", "combined"], default="none")
     args = parser.parse_args()
 
