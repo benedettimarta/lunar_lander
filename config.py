@@ -67,23 +67,23 @@ PPO_BASE = {
 # One-at-a-time hyperparameter sensitivity experiments.
 # Algorithms are kept separate because DQN and PPO do not have identical parameters.
 DQN_SENSITIVITY = [
-    {"parameter": "learning_rate", "values": [1e-4, 5e-4, 1e-3]},
-    {"parameter": "gamma", "values": [0.95, 0.99, 0.995]},
-    {"parameter": "exploration_final_eps", "values": [0.01, 0.05, 0.10]},
-    {"parameter": "batch_size", "values": [32, 64, 128]},
+    {"parameter": "learning_rate", "values": [5e-5, 1e-4, 2e-4]},
+    {"parameter": "gamma", "values": [0.98, 0.99, 0.995]},
+    {"parameter": "exploration_final_eps", "values": [0.005, 0.01, 0.02]},
+    {"parameter": "batch_size", "values": [64, 128, 256]},
     {"parameter": "buffer_size", "values": [50_000, 100_000, 200_000]},
     {"parameter": "target_update_interval", "values": [500, 1_000, 2_000]},
     {"parameter": "net_arch", "values": [[64, 64], [128, 128], [256, 256]]},
 ]
 
 PPO_SENSITIVITY = [
-    {"parameter": "learning_rate", "values": [1e-4, 3e-4, 1e-3]},
-    {"parameter": "gamma", "values": [0.95, 0.99, 0.995]},
-    {"parameter": "clip_range", "values": [0.1, 0.2, 0.3]},
-    {"parameter": "ent_coef", "values": [0.0, 0.001, 0.01]},
-    {"parameter": "n_steps", "values": [512, 1024, 2048]},
+    {"parameter": "learning_rate", "values": [5e-4, 1e-3, 1.5e-3]},
+    {"parameter": "gamma", "values": [0.99, 0.999, 0.9995]},
+    {"parameter": "clip_range", "values": [0.2, 0.3, 0.4]},
+    {"parameter": "ent_coef", "values": [0.001, 0.01, 0.02]},
+    {"parameter": "n_steps", "values": [1024, 2048, 4096]},
     {"parameter": "batch_size", "values": [32, 64, 128]},
-    {"parameter": "net_arch", "values": [[64, 64], [128, 128], [256, 256]]},
+    {"parameter": "net_arch", "values": [[128, 128], [256, 256], [512, 512]]},
 ]
 
 # Reward-shaping sensitivity.
