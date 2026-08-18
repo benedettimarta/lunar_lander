@@ -1,4 +1,19 @@
 {
+  "run_name": "baseline_ppo",
+  "algorithm": "PPO",
+  "total_timesteps": 300000,
+  "learning_rate": 0.0003,
+  "gamma": 0.999,
+  "n_steps": 1024,
+  "batch_size": 64,
+  "n_epochs": 10,
+  "clip_range": 0.2,
+  "ent_coef": 0.01,
+  "gae_lambda": 0.95,
+  "net_arch": [
+    128,
+    128
+  ],
   "mean_reward": 243.04014626397165,
   "std_reward": 47.63457339581531,
   "min_reward": -20.160959915257266,
@@ -1020,5 +1035,6 @@
     261.0,
     376.0,
     255.0
-  ]
+  ],
+  "model_path": "C:\\Users\\marta\\OneDrive\\Desktop\\python\\lunar_lander\\models\\baseline_ppo.zip"
 }

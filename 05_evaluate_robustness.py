@@ -36,7 +36,7 @@ def main():
                 "mean_final_distance_to_pad": metrics["mean_final_distance_to_pad"],
             }
             rows.append(row)
-            save_json({**metrics, **row}, RESULTS_DIR / f"robustness_{algorithm.lower()}_{case_name}.json")
+            #save_json({**metrics, **row}, RESULTS_DIR / f"robustness_{algorithm.lower()}_{case_name}.json")
 
     df = pd.DataFrame(rows)
     output = RESULTS_DIR / "robustness_summary.csv"

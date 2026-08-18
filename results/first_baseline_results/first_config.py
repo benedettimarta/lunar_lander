@@ -38,14 +38,14 @@ CURRICULUM_STAGE_TIMESTEPS = 150_000
 
 # Baseline DQN hyperparameters
 DQN_BASE = {
-    "learning_rate": 1e-4, #5e-5
-    "gamma": 0.99, # 0.995
+    "learning_rate": 1e-4,
+    "gamma": 0.99,
     "exploration_fraction": 0.20,
-    "exploration_final_eps": 0.01, #0.005
+    "exploration_final_eps": 0.01,
     "buffer_size": 100_000,
     "learning_starts": 1_000,
-    "batch_size": 64, # 64
-    "target_update_interval": 1_000, #2000
+    "batch_size": 128,
+    "target_update_interval": 1_000,
     "train_freq": 4,
     "gradient_steps": 1,
     "net_arch": [128, 128],
@@ -53,15 +53,15 @@ DQN_BASE = {
 
 # Baseline PPO hyperparameters
 PPO_BASE = {
-    "learning_rate": 5e-4, # 1e-4
-    "gamma": 0.99,
-    "n_steps": 4096, # 2048
+    "learning_rate": 3e-4, # 1e-4
+    "gamma": 0.999,
+    "n_steps": 1024, # 2048
     "batch_size": 64,
     "n_epochs": 10,
     "clip_range": 0.2,
     "ent_coef": 0.01, # 0.001
     "gae_lambda": 0.95,
-    "net_arch": [512, 512], # [256, 256]
+    "net_arch": [128, 128], # [256, 256]
 }
 
 # One-at-a-time hyperparameter sensitivity experiments.

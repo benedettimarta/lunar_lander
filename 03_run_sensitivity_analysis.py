@@ -10,6 +10,8 @@ from config import (
 )
 from core import clean_value, evaluate_model, make_model, make_monitored_env, save_json, set_global_seed
 
+SENSITIVITY_JSON_DIR = RESULTS_DIR / "sensitivity_runs"
+SENSITIVITY_JSON_DIR.mkdir(exist_ok=True)
 
 def train_case(algorithm, base_hp, parameter, value, seed):
     hp = base_hp.copy()
@@ -22,7 +24,7 @@ def train_case(algorithm, base_hp, parameter, value, seed):
     print(f"Training {run_name}")
     model.learn(total_timesteps=SENSITIVITY_TIMESTEPS)
     model_path = MODELS_DIR / f"{run_name}.zip"
-    model.save(model_path)
+    #model.save(model_path)
     env.close()
 
     metrics = evaluate_model(model, n_episodes=N_EVAL_EPISODES, seed=seed)
@@ -45,7 +47,7 @@ def train_case(algorithm, base_hp, parameter, value, seed):
         "mean_speed": metrics["mean_speed"],
         "model_path": str(model_path),
     }
-    save_json({**metrics, **row}, RESULTS_DIR / f"{run_name}_evaluation.json")
+    #save_json({**metrics, **row}, SENSITIVITY_JSON_DIR / f"{run_name}_evaluation.json")
     return row
 
 

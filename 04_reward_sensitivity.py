@@ -45,7 +45,7 @@ def train_reward_case(algorithm, base_hp, reward_case, seed):
         "mean_speed": metrics["mean_speed"],
         "model_path": str(model_path),
     }
-    save_json({**metrics, **row}, RESULTS_DIR / f"{run_name}_evaluation.json")
+    #save_json({**metrics, **row}, RESULTS_DIR / f"{run_name}_evaluation.json")
     return row
 
 
