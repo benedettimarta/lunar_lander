@@ -25,15 +25,15 @@ for d in [MODELS_DIR, RESULTS_DIR, FIGURES_DIR, LOGS_DIR]:
 
 # General settings
 DEFAULT_SEED = 42
-SEEDS = [42, 123]  # Use [42, 123, 999] for a stronger final report if runtime allows.
+SEEDS = [42, 123, 999]
 N_EVAL_EPISODES = 200
 SUCCESS_REWARD_THRESHOLD = 200.0
 CRASH_REWARD_THRESHOLD = -100.0
 
-# Training durations. Increase these for final runs if you have time.
+# Training durations
 BASELINE_TIMESTEPS = 300_000
-SENSITIVITY_TIMESTEPS = 50_000
-REWARD_SENSITIVITY_TIMESTEPS = 50_000
+SENSITIVITY_TIMESTEPS = 150_000
+REWARD_SENSITIVITY_TIMESTEPS = 150_000
 CURRICULUM_STAGE_TIMESTEPS = 150_000
 
 # Baseline DQN hyperparameters
@@ -71,7 +71,7 @@ DQN_SENSITIVITY = [
     {"parameter": "gamma", "values": [0.98, 0.99, 0.995]},
     {"parameter": "exploration_final_eps", "values": [0.005, 0.01, 0.02]},
     {"parameter": "batch_size", "values": [64, 128, 256]},
-    {"parameter": "buffer_size", "values": [50_000, 100_000, 200_000]},
+    {"parameter": "buffer_size", "values": [50_000, 75_000, 100_000]},
     {"parameter": "target_update_interval", "values": [500, 1_000, 2_000]},
     {"parameter": "net_arch", "values": [[64, 64], [128, 128], [256, 256]]},
 ]
