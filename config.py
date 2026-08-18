@@ -39,12 +39,12 @@ CURRICULUM_STAGE_TIMESTEPS = 150_000
 # Baseline DQN hyperparameters
 DQN_BASE = {
     "learning_rate": 1e-4, #5e-5
-    "gamma": 0.99, # 0.995
+    "gamma": 0.995, # 0.995 GOOD
     "exploration_fraction": 0.20,
-    "exploration_final_eps": 0.01, #0.005
+    "exploration_final_eps": 0.01,
     "buffer_size": 100_000,
     "learning_starts": 1_000,
-    "batch_size": 64, # 64
+    "batch_size": 128, # 64
     "target_update_interval": 1_000, #2000
     "train_freq": 4,
     "gradient_steps": 1,
