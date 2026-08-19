@@ -99,8 +99,8 @@ def reward_sensitivity_plots():
     if not f.exists():
         return
     df = pd.read_csv(f)
-    save_bar(df, "reward_case", "mean_reward", "Reward-design sensitivity", "Mean reward", "reward_sensitivity_reward.png", hue="algorithm")
-    save_bar(df, "reward_case", "mean_fuel_proxy", "Fuel use under reward shaping", "Mean fuel proxy", "reward_sensitivity_fuel.png", hue="algorithm")
+    save_bar(df, "reward_case", "mean_common_reward", "Reward-design sensitivity", "Mean reward", "reward_sensitivity_reward.png", hue="algorithm")
+    save_bar(df, "reward_case", "mean_control_use_proxy", "Fuel use under reward shaping", "Mean fuel proxy", "reward_sensitivity_fuel.png", hue="algorithm")
     save_bar(df, "reward_case", "mean_crash_rate", "Crash rate under reward shaping", "Crash rate", "reward_sensitivity_crash.png", hue="algorithm")
 
 
