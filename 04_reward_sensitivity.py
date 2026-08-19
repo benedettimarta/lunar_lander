@@ -11,21 +11,29 @@ from config import (
     DQN_BASE, LOGS_DIR, MODELS_DIR, N_EVAL_EPISODES, PPO_BASE,
     RESULTS_DIR, REWARD_CASES, REWARD_SENSITIVITY_TIMESTEPS, SEEDS
 )
-from core import evaluate_model, make_model, make_monitored_env, save_json, set_global_seed
+from core import evaluate_model, load_model, make_model, make_monitored_env, save_json, set_global_seed
 
 
 def train_reward_case(algorithm, base_hp, reward_case, seed):
     case_name = reward_case["case"]
     reward_kwargs = {k: v for k, v in reward_case.items() if k != "case"}
     run_name = f"reward_{algorithm.lower()}_{case_name}_seed_{seed}"
-    set_global_seed(seed)
-    env = make_monitored_env(seed=seed, log_dir=LOGS_DIR / run_name, reward_kwargs=reward_kwargs)
-    model = make_model(algorithm, env, base_hp.copy(), seed=seed, verbose=0)
-    print(f"Training {run_name}")
-    model.learn(total_timesteps=REWARD_SENSITIVITY_TIMESTEPS)
     model_path = MODELS_DIR / f"{run_name}.zip"
-    model.save(model_path)
-    env.close()
+    set_global_seed(seed)
+
+    # Resume from an existing trained model when possible.
+    if model_path.exists():
+        print(f"Skipping training, model already exists: {run_name}")
+        model = load_model(algorithm, model_path)
+
+    else:
+        env = make_monitored_env(seed=seed, log_dir=LOGS_DIR / run_name, reward_kwargs=reward_kwargs)
+        model = make_model(algorithm, env, base_hp.copy(), seed=seed, verbose=0)
+        print(f"Training {run_name}")
+        model.learn(total_timesteps=REWARD_SENSITIVITY_TIMESTEPS)
+        
+        model.save(model_path)
+        env.close()
 
     # Evaluation 1: use the reward definition employed during training.
     shaped_metrics = evaluate_model(
