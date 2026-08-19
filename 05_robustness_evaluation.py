@@ -34,6 +34,8 @@ def main():
                 "mean_episode_length": metrics["mean_episode_length"],
                 "mean_fuel_proxy": metrics["mean_fuel_proxy"],
                 "mean_final_distance_to_pad": metrics["mean_final_distance_to_pad"],
+                "mean_abs_angle": metrics["mean_abs_angle"],
+                "mean_speed": metrics["mean_speed"],
             }
             rows.append(row)
             #save_json({**metrics, **row}, RESULTS_DIR / f"robustness_{algorithm.lower()}_{case_name}.json")

@@ -24,25 +24,48 @@ def train_reward_case(algorithm, base_hp, reward_case, seed):
     print(f"Training {run_name}")
     model.learn(total_timesteps=REWARD_SENSITIVITY_TIMESTEPS)
     model_path = MODELS_DIR / f"{run_name}.zip"
-    #model.save(model_path)
+    model.save(model_path)
     env.close()
 
-    # Evaluate with the same reward definition used during training.
-    metrics = evaluate_model(model, n_episodes=N_EVAL_EPISODES, seed=seed, reward_kwargs=reward_kwargs)
+    # Evaluation 1: use the reward definition employed during training.
+    shaped_metrics = evaluate_model(
+        model,
+        n_episodes=N_EVAL_EPISODES,
+        seed=seed,
+        reward_kwargs=reward_kwargs,
+    )
+
+    # Evaluation 2: use the original environment reward for a fair comparison between all reward-design cases.
+    common_metrics = evaluate_model(
+        model,
+        n_episodes=N_EVAL_EPISODES,
+        seed=seed,
+    )
+
     row = {
         "run_name": run_name,
         "algorithm": algorithm,
         "reward_case": case_name,
         "seed": seed,
         **reward_kwargs,
-        "mean_reward": metrics["mean_reward"],
-        "std_reward": metrics["std_reward"],
-        "success_rate": metrics["success_rate"],
-        "crash_rate": metrics["crash_rate"],
-        "mean_episode_length": metrics["mean_episode_length"],
-        "mean_fuel_proxy": metrics["mean_fuel_proxy"],
-        "mean_abs_angle": metrics["mean_abs_angle"],
-        "mean_speed": metrics["mean_speed"],
+
+        # Reward under the shaped objective used during training
+        "shaped_mean_reward": shaped_metrics["mean_reward"],
+        "shaped_std_reward": shaped_metrics["std_reward"],
+
+        # Performance under the same original reward for every model
+        "common_mean_reward": common_metrics["mean_reward"],
+        "common_std_reward": common_metrics["std_reward"],
+        "success_rate": common_metrics["success_rate"],
+        "crash_rate": common_metrics["crash_rate"],
+        "mean_episode_length": common_metrics["mean_episode_length"],
+        "mean_control_use_proxy": common_metrics["mean_fuel_proxy"],
+        "mean_final_distance_to_pad": common_metrics[
+            "mean_final_distance_to_pad"
+        ],
+        "mean_abs_angle": common_metrics["mean_abs_angle"],
+        "mean_speed": common_metrics["mean_speed"],
+
         "model_path": str(model_path),
     }
     #save_json({**metrics, **row}, RESULTS_DIR / f"{run_name}_evaluation.json")
@@ -60,14 +83,26 @@ def main():
     individual_path = RESULTS_DIR / "reward_sensitivity_individual_runs.csv"
     individual.to_csv(individual_path, index=False)
 
-    summary = individual.groupby(["algorithm", "reward_case"], as_index=False).agg(
-        mean_reward=("mean_reward", "mean"),
-        reward_std_across_seeds=("mean_reward", "std"),
+    summary = individual.groupby(
+        ["algorithm", "reward_case"],
+        as_index=False
+    ).agg(
+        mean_shaped_reward=("shaped_mean_reward", "mean"),
+        shaped_reward_std_across_seeds=("shaped_mean_reward", "std"),
+
+        mean_common_reward=("common_mean_reward", "mean"),
+        common_reward_std_across_seeds=("common_mean_reward", "std"),
+
         mean_success_rate=("success_rate", "mean"),
+        success_rate_std_across_seeds=("success_rate", "std"),
+
         mean_crash_rate=("crash_rate", "mean"),
-        mean_fuel_proxy=("mean_fuel_proxy", "mean"),
+        mean_control_use_proxy=("mean_control_use_proxy", "mean"),
+        mean_episode_length=("mean_episode_length", "mean"),
+        mean_final_distance_to_pad=("mean_final_distance_to_pad", "mean"),
         mean_abs_angle=("mean_abs_angle", "mean"),
         mean_speed=("mean_speed", "mean"),
+
         n_runs=("seed", "count"),
     )
     summary_path = RESULTS_DIR / "reward_sensitivity_summary.csv"

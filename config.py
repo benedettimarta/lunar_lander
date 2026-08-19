@@ -128,7 +128,9 @@ REWARD_CASES = [
 # - a combined sensor and actuator uncertainty case.
 ROBUSTNESS_CASES = [
     {"case": "nominal", "obs_noise_std": 0.0, "action_dropout_prob": 0.0},
-    {"case": "low_sensor_noise", "obs_noise_std": 0.02, "action_dropout_prob": 0.0},
+    {"case": "very_low_sensor_noise", "obs_noise_std": 0.005, "action_dropout_prob": 0.0},
+    {"case": "low_sensor_noise", "obs_noise_std": 0.01, "action_dropout_prob": 0.0},
+    {"case": "medium_sensor_noise", "obs_noise_std": 0.02, "action_dropout_prob": 0.0},
     {"case": "high_sensor_noise", "obs_noise_std": 0.05, "action_dropout_prob": 0.0},
     {"case": "low_thruster_dropout", "obs_noise_std": 0.0, "action_dropout_prob": 0.05},
     {"case": "high_thruster_dropout", "obs_noise_std": 0.0, "action_dropout_prob": 0.15},
