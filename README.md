@@ -93,7 +93,7 @@ lunar_lander/
 ├── 05_robustness_evaluation.py
 ├── 06_curriculum_experiment.py
 ├── 07_plot_results.py
-├── 08_watch_agent.py
+├── 08_watch_trained_agent.py
 │
 ├── models/
 ├── logs/
@@ -187,9 +187,9 @@ python 06_curriculum_experiment.py
 Optional visualization:
 
 ```bash
-python 08_watch_agent.py --algorithm DQN
-python 08_watch_agent.py --algorithm PPO
-python 08_watch_agent.py --algorithm DQN --disturbance combined
+python 08_watch_trained_agent.py --algorithm DQN
+python 08_watch_trained_agent.py --algorithm PPO
+python 08_watch_trained_agent.py --algorithm DQN --disturbance combined
 ```
 
 ---
@@ -434,26 +434,26 @@ The script only plots results that already exist. For example, if reward sensiti
 
 ---
 
-### 9.8 `08_watch_agent.py`
+### 9.8 `08_watch_trained_agent.py`
 
 Visualizes a trained model in the Lunar Lander environment.
 
 Run:
 
 ```bash
-python 08_watch_agent.py --algorithm DQN
+python 08_watch_trained_agent.py --algorithm DQN
 ```
 
 or:
 
 ```bash
-python 08_watch_agent.py --algorithm PPO
+python 08_watch_trained_agent.py --algorithm PPO
 ```
 
 To test a disturbance visually:
 
 ```bash
-python 08_watch_agent.py --algorithm DQN --disturbance combined
+python 08_watch_trained_agent.py --algorithm DQN --disturbance combined
 ```
 
 Available disturbances:
@@ -484,7 +484,7 @@ Approximate runtimes for the default settings:
 05_robustness_evaluation.py    5-15 minutes
 06_curriculum_experiment.py    15-40 minutes
 07_plot_results.py             under 1 minute
-08_watch_agent.py              one episode
+08_watch_trained_agent.py              one episode
 ```
 
 The longest scripts are:

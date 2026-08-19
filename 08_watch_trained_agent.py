@@ -2,9 +2,9 @@
 Watch a trained model.
 
 Examples:
-    python 08_watch_agent.py --algorithm DQN
-    python 08_watch_agent.py --algorithm PPO --disturbance low_noise
-    python 08_watch_agent.py --algorithm DQN --disturbance combined
+    python 08_watch_trained_agent.py --algorithm DQN
+    python 08_watch_trained_agent.py --algorithm PPO --disturbance low_noise
+    python 08_watch_trained_agent.py --algorithm DQN --disturbance combined
 """
 import argparse
 from config import DEFAULT_SEED, MODELS_DIR
