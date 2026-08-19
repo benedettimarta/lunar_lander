@@ -24,7 +24,7 @@ def train_reward_case(algorithm, base_hp, reward_case, seed):
     print(f"Training {run_name}")
     model.learn(total_timesteps=REWARD_SENSITIVITY_TIMESTEPS)
     model_path = MODELS_DIR / f"{run_name}.zip"
-    model.save(model_path)
+    #model.save(model_path)
     env.close()
 
     # Evaluate with the same reward definition used during training.
