@@ -14,8 +14,8 @@ OPTIONS = {
     "4": ("Run reward-design sensitivity", "04_reward_sensitivity.py"),
     "5": ("Evaluate robustness under sensor/actuator uncertainty", "05_robustness_evaluation.py"),
     "6": ("Generate plots", "06_plot_results.py"),
-    "7": ("Watch DQN baseline", "07_watch_agent.py --algorithm DQN"),
-    "8": ("Watch PPO baseline", "07_watch_agent.py --algorithm PPO"),
+    "7": ("Watch DQN baseline", "07_watch_trained_agent.py --algorithm DQN"),
+    "8": ("Watch PPO baseline", "07_watch_trained_agent.py --algorithm PPO"),
 }
 
 
