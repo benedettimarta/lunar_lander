@@ -14,7 +14,6 @@ It also includes:
 - hyperparameter sensitivity analysis;
 - reward-design sensitivity analysis;
 - robustness testing under sensor and actuator uncertainty;
-- optional curriculum/fine-tuning experiment;
 - automatic result plotting.
 
 ---
@@ -91,9 +90,8 @@ lunar_lander/
 ├── 03_sensitivity_analysis.py
 ├── 04_reward_sensitivity.py
 ├── 05_robustness_evaluation.py
-├── 06_curriculum_experiment.py
-├── 07_plot_results.py
-├── 08_watch_trained_agent.py
+├── 06_plot_results.py
+├── 07_watch_trained_agent.py
 │
 ├── models/
 ├── logs/
@@ -153,7 +151,7 @@ If you only want to train and evaluate the baseline models, run:
 python 01_train_baselines.py
 python 02_evaluate_baselines.py
 python 05_robustness_evaluation.py
-python 07_plot_results.py
+python 06_plot_results.py
 ```
 
 This will:
@@ -175,21 +173,16 @@ python 02_evaluate_baselines.py
 python 03_sensitivity_analysis.py
 python 04_reward_sensitivity.py
 python 05_robustness_evaluation.py
-python 07_plot_results.py
+python 06_plot_results.py
 ```
 
-Optional:
-
-```bash
-python 06_curriculum_experiment.py
-```
 
 Optional visualization:
 
 ```bash
-python 08_watch_trained_agent.py --algorithm DQN
-python 08_watch_trained_agent.py --algorithm PPO
-python 08_watch_trained_agent.py --algorithm DQN --disturbance combined
+python 07_watch_trained_agent.py --algorithm DQN
+python 07_watch_trained_agent.py --algorithm PPO
+python 07_watch_trained_agent.py --algorithm DQN --disturbance combined
 ```
 
 ---
@@ -210,10 +203,9 @@ This opens a menu that allows the user to select which script to run, for exampl
 3. Run DQN/PPO hyperparameter sensitivity
 4. Run reward-design sensitivity
 5. Evaluate robustness under sensor/actuator uncertainty
-6. Optional curriculum/fine-tuning experiment
-7. Generate plots
-8. Watch DQN baseline
-9. Watch PPO baseline
+6. Generate plots
+7. Watch DQN baseline
+8. Watch PPO baseline
 ```
 
 ---
@@ -380,36 +372,14 @@ results/robustness_ppo_<case>.json
 
 ---
 
-### 9.6 `06_curriculum_experiment.py`
-
-Optional experiment.
-
-Run:
-
-```bash
-python 06_curriculum_experiment.py
-```
-
-The idea is to start with a controller trained in the nominal environment and then fine-tune it under mild uncertainty. The script checks whether this improves performance under stronger uncertainty.
-
-This script is useful if the report needs an additional advanced experiment, but it is not required for the basic project workflow.
-
-Outputs:
-
-```text
-results/curriculum_summary.csv
-```
-
----
-
-### 9.7 `07_plot_results.py`
+### 9.6 `06_plot_results.py`
 
 Generates plots from the available result files.
 
 Run:
 
 ```bash
-python 07_plot_results.py
+python 06_plot_results.py
 ```
 
 Possible outputs:
@@ -427,33 +397,32 @@ figures/reward_sensitivity_crash.png
 figures/robustness_reward.png
 figures/robustness_success.png
 figures/robustness_crash.png
-figures/curriculum_reward.png
 ```
 
 The script only plots results that already exist. For example, if reward sensitivity has not been run yet, reward-sensitivity plots will be skipped.
 
 ---
 
-### 9.8 `08_watch_trained_agent.py`
+### 9.7 `07_watch_trained_agent.py`
 
 Visualizes a trained model in the Lunar Lander environment.
 
 Run:
 
 ```bash
-python 08_watch_trained_agent.py --algorithm DQN
+python 07_watch_trained_agent.py --algorithm DQN
 ```
 
 or:
 
 ```bash
-python 08_watch_trained_agent.py --algorithm PPO
+python 07_watch_trained_agent.py --algorithm PPO
 ```
 
 To test a disturbance visually:
 
 ```bash
-python 08_watch_trained_agent.py --algorithm DQN --disturbance combined
+python 07_watch_trained_agent.py --algorithm DQN --disturbance combined
 ```
 
 Available disturbances:
@@ -482,9 +451,8 @@ Approximate runtimes for the default settings:
 03_sensitivity_analysis.py     several hours
 04_reward_sensitivity.py       2-5 hours
 05_robustness_evaluation.py    5-15 minutes
-06_curriculum_experiment.py    15-40 minutes
-07_plot_results.py             under 1 minute
-08_watch_trained_agent.py              one episode
+06_plot_results.py             under 1 minute
+07_watch_trained_agent.py      one episode
 ```
 
 The longest scripts are:

@@ -13,10 +13,9 @@ OPTIONS = {
     "3": ("Run DQN/PPO hyperparameter sensitivity", "03_sensitivity_analysis.py"),
     "4": ("Run reward-design sensitivity", "04_reward_sensitivity.py"),
     "5": ("Evaluate robustness under sensor/actuator uncertainty", "05_robustness_evaluation.py"),
-    "6": ("Optional curriculum/fine-tuning experiment", "06_curriculum_experiment.py"),
-    "7": ("Generate plots", "07_plot_results.py"),
-    "8": ("Watch DQN baseline", "08_watch_agent.py --algorithm DQN"),
-    "9": ("Watch PPO baseline", "08_watch_agent.py --algorithm PPO"),
+    "6": ("Generate plots", "06_plot_results.py"),
+    "7": ("Watch DQN baseline", "07_watch_agent.py --algorithm DQN"),
+    "8": ("Watch PPO baseline", "07_watch_agent.py --algorithm PPO"),
 }
 
 
