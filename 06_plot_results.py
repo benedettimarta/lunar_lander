@@ -257,7 +257,7 @@ def curriculum_plots():
 
 def main():
     baseline_learning_curves()
-    #baseline_comparison()
+    baseline_comparison()
     sensitivity_plots()
     sensitivity_report_plots()
     reward_sensitivity_plots()

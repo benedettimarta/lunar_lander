@@ -35,7 +35,7 @@ def train_baseline(algorithm, hp):
 
 def main():
     train_baseline("DQN", DQN_BASE.copy())
-    #train_baseline("PPO", PPO_BASE.copy())
+    train_baseline("PPO", PPO_BASE.copy())
 
 
 if __name__ == "__main__":

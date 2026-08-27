@@ -24,7 +24,7 @@ def train_case(algorithm, base_hp, parameter, value, seed):
     print(f"Training {run_name}")
     model.learn(total_timesteps=SENSITIVITY_TIMESTEPS)
     model_path = MODELS_DIR / f"{run_name}.zip"
-    #model.save(model_path)
+    model.save(model_path)
     env.close()
 
     metrics = evaluate_model(model, n_episodes=N_EVAL_EPISODES, seed=seed)
